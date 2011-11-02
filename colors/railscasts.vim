@@ -44,8 +44,19 @@ hi link htmlTag                     xmlTag
 hi link htmlTagName                 xmlTagName
 hi link htmlEndTag                  xmlEndTag
 
-highlight Normal                    guifg=#E6E1DC guibg=#232323 
-highlight Cursor                    guifg=#000000 ctermfg=0 guibg=#FFFFFF ctermbg=15    
+" Popup Menu
+" ----------
+" normal item in popup
+hi Pmenu                     guifg=#F6F3E8 guibg=#444444 gui=NONE
+" selected item in popup
+hi PmenuSel                  guifg=#000000 guibg=#A5C261 gui=NONE
+" scrollbar in popup
+hi PMenuSbar                 guibg=#5A647E gui=NONE
+" thumb of the scrollbar in the popup
+hi PMenuThumb                guibg=#AAAAAA gui=NONE
+
+highlight Normal                    guifg=#E6E1DC guibg=#232323
+highlight Cursor                    guifg=#000000 ctermfg=0 guibg=#FFFFFF ctermbg=15
 highlight CursorLine                guibg=#000000 ctermbg=233 cterm=NONE
 
 highlight Comment                   guifg=#BC9458 ctermfg=180 gui=italic
@@ -57,7 +68,7 @@ highlight Identifier                guifg=#6D9CBE ctermfg=73 gui=NONE cterm=NONE
 highlight Include                   guifg=#CC7833 ctermfg=173 gui=NONE cterm=NONE
 highlight PreCondit                 guifg=#CC7833 ctermfg=173 gui=NONE cterm=NONE
 highlight Keyword                   guifg=#CC7833 ctermfg=173 cterm=NONE
-highlight LineNr                    guifg=#2B2B2B ctermfg=159 guibg=#C0C0FF
+highlight LineNr                    guifg=#9fafaf ctermfg=159 guibg=#232323
 highlight Number                    guifg=#A5C261 ctermfg=107
 highlight PreProc                   guifg=#E6E1DC ctermfg=103
 highlight Search                    guifg=NONE ctermfg=NONE guibg=#2b2b2b ctermbg=235 gui=italic cterm=underline
@@ -69,7 +80,7 @@ highlight Visual                    guibg=#5A647E ctermbg=60
 
 highlight DiffAdd                   guifg=#E6E1DC ctermfg=7 guibg=#519F50 ctermbg=71
 highlight DiffDelete                guifg=#E6E1DC ctermfg=7 guibg=#660000 ctermbg=52
-highlight Special                   guifg=#DA4939 ctermfg=167 
+highlight Special                   guifg=#DA4939 ctermfg=167
 
 highlight pythonBuiltin             guifg=#6D9CBE ctermfg=73 gui=NONE cterm=NONE
 highlight rubyBlockParameter        guifg=#FFFFFF ctermfg=15

@@ -1,3 +1,112 @@
+set clipboard=unnamedplus
+
+" change the mapleader from \ to ,
+let mapleader = ","
+
+" Show the cursor position all the time
+set ruler
+
+" Command-Shift-F for Ack
+map <D-F> :Ack<space>
+
+" Project Tree
+if exists("loaded_nerd_tree")
+  autocmd VimEnter * call s:CdIfDirectory(expand("<amatch>"))
+  autocmd FocusGained * call s:UpdateNERDTree()
+  autocmd WinEnter * call s:CloseIfOnlyNerdTreeLeft()
+endif
+
+" Close all open buffers on entering a window if the only
+" buffer that's left is the NERDTree buffer
+function s:CloseIfOnlyNerdTreeLeft()
+  if exists("t:NERDTreeBufName")
+    if bufwinnr(t:NERDTreeBufName) != -1
+      if winnr("$") == 1
+        q
+      endif
+    endif
+  endif
+endfunction
+
+" If the parameter is a directory, cd into it
+function s:CdIfDirectory(directory)
+  let explicitDirectory = isdirectory(a:directory)
+  let directory = explicitDirectory || empty(a:directory)
+
+  if explicitDirectory
+    exe "cd " . fnameescape(a:directory)
+  endif
+
+  " Allows reading from stdin
+  " ex: git diff | mvim -R -
+  if strlen(a:directory) == 0
+    return
+  endif
+
+  if directory
+    NERDTree
+    wincmd p
+    bd
+  endif
+
+  if explicitDirectory
+    wincmd p
+  endif
+endfunction
+
+" Store temporary files in a central spot
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+
+" Make searches case-sensitive only if they contain upper-case characters
+set ignorecase
+set smartcase
+
+" Command-/ to toggle comments
+map <leader>/ <plug>NERDCommenterToggle<CR>
+imap <leader>/ <Esc><plug>NERDCommenterToggle<CR>i
+
+function! ShowRoutes()
+  " Requires 'scratch' plugin
+  :topleft 100 :split __Routes__
+  " Make sure Vim doesn't write __Routes__ as a file
+  :set buftype=nofile
+  " Delete everything
+  :normal 1GdG
+  " Put routes output in buffer
+  :0r! rake -s routes
+  " Size window to number of lines (1 plus rake output length)
+  :exec ":normal " . line("$") . "_ "
+  " Move cursor to bottom
+  :normal 1GG
+  " Delete empty trailing line
+  :normal dd
+endfunction
+map <leader>gR :call ShowRoutes()<cr>
+
+"Command-T
+
+"map to CommandT TextMate style finder
+nnoremap <leader>t :CommandT<CR>
+
+let g:CommandTMaxHeight=5
+"map <c-f> :CommandTFlush<cr>\|:CommandT<cr>
+map <c-q> :CommandTFlush<cr>
+map <leader>gv :CommandT app/views<cr>
+map <leader>gc :CommandT app/controllers<cr>
+map <leader>gm :CommandT app/models<cr>
+map <leader>gh :CommandT app/helpers<cr>
+map <leader>gl :CommandT lib<cr>
+map <leader>gp :CommandT public<cr>
+map <leader>gs :CommandT public/stylesheets/sass<cr>
+map <leader>gf :CommandT features<cr>
+
+" Get off my lawn
+nnoremap <Left> :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up> :echoe "Use k"<CR>
+nnoremap <Down> :echoe "Use j"<CR>
+
 "avoiding annoying CSApprox warning message
 let g:CSApprox_verbose_level = 0
 
@@ -69,6 +178,9 @@ set laststatus=2
 
 "turn off needless toolbar on gvim/mvim
 set guioptions-=T
+
+"turn off scrollbars
+set guioptions-=L
 
 "recalculate the trailing whitespace warning when idle, and after saving
 autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
@@ -155,7 +267,7 @@ function! s:LongLines()
     let i = 1
     while i <= line("$")
         let len = strlen(substitute(getline(i), '\t', spaces, 'g'))
-        if len > threshold
+       if len > threshold
             call add(long_line_lens, len)
         endif
         let i += 1
@@ -188,9 +300,9 @@ set foldmethod=indent   "fold based on indent
 set foldnestmax=3       "deepest fold is 3 levels
 set nofoldenable        "dont fold by default
 
-set wildmode=list:longest   "make cmdline tab completion similar to bash
+set wildmode=list:longest,list:full   "make cmdline tab completion similar to bash
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
-set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
+set wildignore+=*.o,*.obj,.git,*.png,*.PNG,*.JPG,*.jpg,*.GIF,*.gif,*.zip,*.ZIP,*.eot,*.svg,*.csv,*.ttf,*.svg,*.eof,*.ico,*.woff,vendor/**,coverage/**,tmp/**,rdoc/**,*.sqlite3
 
 "display tabs and trailing spaces
 "set list
@@ -218,15 +330,12 @@ set ttymouse=xterm2
 "hide buffers when not displayed
 set hidden
 
-"Command-T configuration
-let g:CommandTMaxHeight=10
-let g:CommandTMatchWindowAtTop=1
-
 if has("gui_running")
     "tell the term has 256 colors
     set t_Co=256
 
     colorscheme railscasts
+
     set guitablabel=%M%t
     set lines=40
     set columns=115
@@ -276,9 +385,6 @@ inoremap <C-L> <C-O>:nohls<CR>
 
 "map to bufexplorer
 nnoremap <leader>b :BufExplorer<cr>
-
-"map to CommandT TextMate style finder
-nnoremap <leader>t :CommandT<CR>
 
 "map Q to something useful
 noremap Q gq
