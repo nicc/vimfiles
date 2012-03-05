@@ -1,4 +1,8 @@
-set clipboard=unnamedplus
+"Use Vim settings, rather then Vi settings (much better!).
+"This must be first, because it changes other options as a side effect.
+set nocompatible
+
+set clipboard=unnamed
 
 " change the mapleader from \ to ,
 let mapleader = ","
@@ -6,8 +10,8 @@ let mapleader = ","
 " Show the cursor position all the time
 set ruler
 
-" Command-Shift-F for Ack
-map <D-F> :Ack<space>
+" Open last buffer
+noremap <Leader><Leader> <C-^>
 
 " Project Tree
 if exists("loaded_nerd_tree")
@@ -66,24 +70,6 @@ set smartcase
 map <leader>/ <plug>NERDCommenterToggle<CR>
 imap <leader>/ <Esc><plug>NERDCommenterToggle<CR>i
 
-function! ShowRoutes()
-  " Requires 'scratch' plugin
-  :topleft 100 :split __Routes__
-  " Make sure Vim doesn't write __Routes__ as a file
-  :set buftype=nofile
-  " Delete everything
-  :normal 1GdG
-  " Put routes output in buffer
-  :0r! rake -s routes
-  " Size window to number of lines (1 plus rake output length)
-  :exec ":normal " . line("$") . "_ "
-  " Move cursor to bottom
-  :normal 1GG
-  " Delete empty trailing line
-  :normal dd
-endfunction
-map <leader>gR :call ShowRoutes()<cr>
-
 "Command-T
 
 "map to CommandT TextMate style finder
@@ -91,21 +77,16 @@ nnoremap <leader>t :CommandT<CR>
 
 let g:CommandTMaxHeight=5
 "map <c-f> :CommandTFlush<cr>\|:CommandT<cr>
-map <c-q> :CommandTFlush<cr>
-map <leader>gv :CommandT app/views<cr>
-map <leader>gc :CommandT app/controllers<cr>
-map <leader>gm :CommandT app/models<cr>
-map <leader>gh :CommandT app/helpers<cr>
-map <leader>gl :CommandT lib<cr>
-map <leader>gp :CommandT public<cr>
-map <leader>gs :CommandT public/stylesheets/sass<cr>
-map <leader>gf :CommandT features<cr>
+map <leader>tF :CommandTFlush<cr>
 
 " Get off my lawn
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
+nnoremap <Left> :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+
+"ESC is too far
+inoremap jj <Esc>
 
 "avoiding annoying CSApprox warning message
 let g:CSApprox_verbose_level = 0
@@ -116,10 +97,6 @@ filetype off
 
 "load pathogen managed plugins
 call pathogen#runtime_append_all_bundles()
-
-"Use Vim settings, rather then Vi settings (much better!).
-"This must be first, because it changes other options as a side effect.
-set nocompatible
 
 "allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -157,9 +134,14 @@ set linespace=4
 set visualbell t_vb=
 
 "try to make possible to navigate within lines of wrapped lines
-nmap <Down> gj
-nmap <Up> gk
+nmap <j> gj
+nmap <k> gk
 set fo=l
+
+" Highlight word at cursor without changing position
+nnoremap <leader>h *<C-O>
+" Highlight word at cursor and then Ack it.
+nnoremap <leader>H *<C-O>:AckFromSearch!<CR>
 
 "statusline setup
 set statusline=%f       "tail of the filename
@@ -380,11 +362,8 @@ silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
 nnoremap <silent> <C-f> :call FindInNERDTree()<CR>
 
 "make <c-l> clear the highlight as well as redraw
-nnoremap <C-L> :nohls<CR><C-L>
+nnoremap <leader>n :nohls<CR><C-L>
 inoremap <C-L> <C-O>:nohls<CR>
-
-"map to bufexplorer
-nnoremap <leader>b :BufExplorer<cr>
 
 "map Q to something useful
 noremap Q gq
@@ -526,4 +505,24 @@ let g:user_zen_settings = {
   \    'extends' : 'html',
   \  },
  \}
+
+function! ShowRoutes()
+  " Requires 'scratch' plugin
+  :topleft 100 :split __Routes__
+  " Make sure Vim doesn't write __Routes__ as a file
+  :set buftype=nofile
+  " Delete everything
+  :normal 1GdG
+  " Put routes output in buffer
+  :0r! rake -s routes
+  " Size window to number of lines (1 plus rake output length)
+  :exec ":normal " . line("$") . "_ "
+  " Move cursor to bottom
+  :normal 1GG
+  " Delete empty trailing line
+  :normal dd
+endfunction
+map <leader>gR :call ShowRoutes()<cr>
+
+
 
