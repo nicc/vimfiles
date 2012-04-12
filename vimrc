@@ -73,11 +73,11 @@ imap <leader>/ <Esc><plug>NERDCommenterToggle<CR>i
 "Command-T
 
 "map to CommandT TextMate style finder
-nnoremap <leader>t :CommandT<CR>
+silent! nnoremap <leader>t :CommandT<CR>
 
 let g:CommandTMaxHeight=5
 "map <c-f> :CommandTFlush<cr>\|:CommandT<cr>
-map <leader>tF :CommandTFlush<cr>
+map <leader>f :CommandTFlush<cr>
 
 " Get off my lawn
 nnoremap <Up> :echoe "Use k"<CR>
@@ -316,7 +316,8 @@ if has("gui_running")
     "tell the term has 256 colors
     set t_Co=256
 
-    colorscheme railscasts
+    "colorscheme railscasts
+    colorscheme solarized
 
     set guitablabel=%M%t
     set lines=40
@@ -332,8 +333,8 @@ if has("gui_running")
         set guifont=Menlo:h14
         " key binding for Command-T to behave properly
         " uncomment to replace the Mac Command-T key to Command-T plugin
-        "macmenu &File.New\ Tab key=<nop>
-        "map <D-t> :CommandT<CR>
+        ""macmenu &File.New\ Tab key=<nop>
+        ""map <D-t> :CommandT<CR>
         " make Mac's Option key behave as the Meta key
     endif
 
@@ -350,7 +351,7 @@ else
         set term=gnome-256color
         colorscheme railscasts
     else
-        colorscheme default
+        colorscheme vividchalk
     endif
 endif
 
@@ -524,5 +525,63 @@ function! ShowRoutes()
 endfunction
 map <leader>gR :call ShowRoutes()<cr>
 
+" Stolen from Gary Bernhardt
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Running tests
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" vim-makegreen binds itself to ,t unless something else is bound to its
+" function.
+map <leader>\dontstealmymapsmakegreen :w\|:call MakeGreen('spec')<cr>
 
+" autoclose binds itself to ,a unless something else is bound to its
+" function.
+nmap <Leader>\dontstealmymapsautoclose <Plug>ToggleAutoCloseMappings
+
+function! RunTests(filename)
+    " Write the file and run tests for the given filename
+    :w
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    if match(a:filename, '\.feature$') != -1
+        exec ":!bundle exec cucumber " . a:filename
+    else
+        if filereadable("script/test")
+            exec ":!script/test " . a:filename
+        else
+            exec ":!bundle exec rspec " . a:filename
+        end
+    end
+endfunction
+
+function! SetTestFile()
+    " Set the spec file that tests will be run for.
+    let t:grb_test_file=@%
+endfunction
+
+function! RunTestFile(...)
+    if a:0
+        let command_suffix = a:1
+    else
+        let command_suffix = ""
+    endif
+
+    " Run the tests for the previously-marked file.
+    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
+    if in_test_file
+        call SetTestFile()
+    elseif !exists("t:grb_test_file")
+        return
+    end
+    call RunTests(t:grb_test_file . command_suffix)
+endfunction
+
+function! RunNearestTest()
+    let spec_line_number = line('.')
+    call RunTestFile(":" . spec_line_number)
+endfunction
+
+map <leader>r :call RunTestFile()<cr>
+map <leader>R :call RunNearestTest()<cr>
+map <leader>a :call RunTests('')<cr>
+map <leader>c :w\|:!cucumber<cr>
+map <leader>C :w\|:!cucumber --profile wip<cr>
