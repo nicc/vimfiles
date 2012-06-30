@@ -1,8 +1,7 @@
 "Use Vim settings, rather then Vi settings (much better!).
 "This must be first, because it changes other options as a side effect.
 set nocompatible
-
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 " change the mapleader from \ to ,
 let mapleader = ","
@@ -314,34 +313,23 @@ set ttymouse=xterm2
 set hidden
 
 if has("gui_running")
-    "tell the term has 256 colors
     set t_Co=256
-
-    "colorscheme railscasts
     colorscheme solarized
-
     set guitablabel=%M%t
     set lines=40
     set columns=115
 
     if has("gui_gnome")
-        set term=gnome-256color
         set guifont=Inconsolata\ 13
     endif
 
     if has("gui_mac") || has("gui_macvim")
         set guifont=Menlo:h14
     endif
-
-    if has("gui_win32") || has("gui_win32s")
-        set guifont=Consolas:h12
-        set enc=utf-8
-    endif
 else
     "dont load csapprox if there is no gui support - silences an annoying warning
     let g:CSApprox_loaded = 1
-
-    "set railscasts colorscheme when running vim in gnome terminal
+    autocmd InsertEnter,InsertLeave * set cul!
     if $COLORTERM == 'gnome-terminal'
         set term=gnome-256color
         colorscheme railscasts
@@ -510,17 +498,8 @@ let g:user_zen_settings = {
 imap {<CR> {}<ESC>i<CR><ESC>O
 
 " NERDTree settings
-nmap wm :NERDTree<cr>
+"nmap wm :NERDTree<cr>
 let NERDTreeIgnore=['\.swp$']
-
-nnoremap <Esc>A <up>
-nnoremap <Esc>B <down>
-nnoremap <Esc>C <right>
-nnoremap <Esc>D <left>
-inoremap <Esc>A <up>
-inoremap <Esc>B <down>
-inoremap <Esc>C <right>
-inoremap <Esc>D <left>
 
 function! ShowRoutes()
   " Requires 'scratch' plugin
@@ -563,7 +542,7 @@ function! RunTests(filename)
         if filereadable("script/test")
             exec ":!script/test " . a:filename
         else
-            exec ":!bundle exec rspec " . a:filename
+            exec ":!bundle exec spec " . a:filename
         end
     end
 endfunction
