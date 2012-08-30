@@ -162,9 +162,9 @@ set guioptions-=T
 set guioptions-=L
 
 "indent settings
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set autoindent
 
@@ -358,7 +358,7 @@ function! RunTests(filename)
         if filereadable("script/test")
             exec ":!script/test " . a:filename
         else
-            exec ":!bundle exec rspec " . a:filename
+            exec ":!bundle exec rspec --no-color " . a:filename
         end
     end
 endfunction
