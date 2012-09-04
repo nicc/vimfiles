@@ -118,13 +118,9 @@ endfunction
 map <leader>/ <plug>NERDCommenterToggle<CR>
 imap <leader>/ <Esc><plug>NERDCommenterToggle<CR>i
 
-"Command-T
-"map to CommandT TextMate style finder
-silent! nnoremap <leader>t :CommandT<CR>
-
-let g:CommandTMaxHeight=5
-"map <c-f> :CommandTFlush<cr>\|:CommandT<cr>
-map <leader>f :CommandTFlush<cr>
+"CtrlP
+let g:ctrlp_map = '<leader>t'
+let g:ctrlp_cmd = 'CtrlP'
 
 "avoiding annoying CSApprox warning message
 let g:CSApprox_verbose_level = 0
@@ -225,12 +221,9 @@ else
         set term=gnome-256color
         colorscheme railscasts
     else
-        if $TERM == 'xterm'
-            set term=xterm-256color
-            colorscheme railscasts
-        else
-            colorscheme default
-        endif
+      let g:solarized_termcolors=256
+      set background=dark
+      colorscheme solarized
     endif
 endif
 
