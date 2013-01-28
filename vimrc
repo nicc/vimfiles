@@ -125,7 +125,7 @@ else
     else
       let g:solarized_termcolors=256
       set background=dark
-      colorscheme solarized
+      colorscheme railscasts
     endif
 endif
 
@@ -171,6 +171,9 @@ vnoremap <F1> <ESC>
 
 "Select last paste
 nnoremap <leader>v V`]
+
+"Paste last yanked text
+map <c-p> "0p
 
 " Command-/ to toggle comments
 map <leader>/ <plug>NERDCommenterToggle<CR>
