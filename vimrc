@@ -317,3 +317,4 @@ map <leader>a :call RunTests('')<cr>
 map <leader>c :w\|:!cucumber<cr>
 map <leader>C :w\|:!cucumber --profile wip<cr>
 
+autocmd User Rails/app/assets/javascripts/* let b:rails_alternate = 'spec/javascripts/' . rails#buffer().name()[23:-11] . '_spec.js.coffee'
