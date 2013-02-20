@@ -317,4 +317,11 @@ map <leader>a :call RunTests('')<cr>
 map <leader>c :w\|:!cucumber<cr>
 map <leader>C :w\|:!cucumber --profile wip<cr>
 
+"use :A to jump to matching jasmine spec
 autocmd User Rails/app/assets/javascripts/* let b:rails_alternate = 'spec/javascripts/' . rails#buffer().name()[23:-11] . '_spec.js.coffee'
+autocmd User Rails/spec/javascripts/* let b:rails_alternate = 'app/assets/javascripts/' . rails#buffer().name()[17:-16] . '.js.coffee'
+
+"change easymotion start key
+let g:EasyMotion_leader_key = '<space>'
+hi link EasyMotionTarget ErrorMsg
+hi EasyMotionShade  ctermfg=grey
