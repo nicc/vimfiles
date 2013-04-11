@@ -7,9 +7,9 @@ set nocompatible
 " --------------------------------------------------------------------
 "
 "Clipboard setting for OSX
-set clipboard+=unnamed
+"set clipboard+=unnamed
 "Clipboard setting for Ubuntu
-"set clipboard=unnamedplus
+set clipboard=unnamedplus
 
 let mapleader = "," "change the mapleader from \ to ,
 set ruler           "Show the cursor position all the time
@@ -241,6 +241,7 @@ let NERDTreeIgnore=['\.swp$']
 " CtrlP
 " --------------------------------------------------------------------
 
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = '<leader>t'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_match_window_reversed = 0
