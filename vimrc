@@ -245,6 +245,10 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = '<leader>t'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_match_window_reversed = 0
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](source_maps)$',
+  \ 'file': '\v\.(map)$',
+  \ }
 
 " --------------------------------------------------------------------
 " White space
